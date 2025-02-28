@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-deployment-lb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app-lb
+  template:
+    metadata:
+      labels:
+        app: my-app-lb
+    spec:
+      containers:
+      - name: my-app-lb-container
+        image: saiprakashkundarapu/chintuproject4:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service-lb
+  labels:
+    app: my-app-lb
+spec:
+  type: LoadBalancer  # ✅ Fixed the spelling
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: my-app-lb
